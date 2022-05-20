@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from pytube import YouTube
 
+#Caractère non valide pour le nom d'un fichier sous windows
+tabC=["/","<",">","?",'|']
 
 def download(labelInfo,url,type):
     try:
@@ -10,6 +12,10 @@ def download(labelInfo,url,type):
         type=(type.get())
         yt = YouTube(url)
         title=yt.title
+        for i in tabC:
+            title=title.replace(i,"")
+      
+        print(title)
         if(type=="MP3"):
             print("mp3")
             (yt.streams.filter(only_audio=True, abr="128kbps")).first().download(filename=title+".mp3")
@@ -29,13 +35,10 @@ def download(labelInfo,url,type):
         return
    
 
-
-
 def interface(root):    
     root.title("Téléchargement Youtube")
-
     mainframe = ttk.Frame(root, padding="3 3 12 12")
-    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))   
     root.columnconfigure(0, weight=1)
     root.rowconfigure(0, weight=1)
     url = StringVar()
@@ -60,6 +63,11 @@ def interface(root):
         child.grid_configure(padx=5, pady=5)
     url_entry.focus()
     root.bind("<Return>", ())
+
+
+
+  
+
 
 root=Tk()
 interface(root)
